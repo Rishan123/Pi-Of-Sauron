@@ -91,42 +91,45 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     if right_cnt > left_cnt:
         direction = 'right'
         sense.set_pixels(right1)
-        time.sleep(sleep)
-        sense.set_pixels(right2)
-        time.sleep(sleep)
-        sense.set_pixels(right3)
-        time.sleep(sleep)
+        print('I see you....')
+#         time.sleep(sleep)
+#         sense.set_pixels(right2)
+#         time.sleep(sleep)
+#         sense.set_pixels(right3)
+#         time.sleep(sleep)
         
     elif left_cnt > right_cnt:
         direction = 'left'
         sense.set_pixels(left1)
         time.sleep(sleep)
+        print('I see you....')
 #         sense.set_pixels(left1)
 #         time.sleep(sleep)
         
-        sense.set_pixels(left2)
-        time.sleep(sleep)
 #         sense.set_pixels(left2)
 #         time.sleep(sleep)
-        
-        sense.set_pixels(left3)
-        time.sleep(sleep)
+#         sense.set_pixels(left2)
+#         time.sleep(sleep)
+#         
+#         sense.set_pixels(left3)
+#         time.sleep(sleep)
 #         sense.set_pixels(left3)
 #         time.sleep(sleep)
     else: 
         direction = 'straight'
         sense.set_pixels(straight1)
         time.sleep(sleep)
+
 #         sense.set_pixels(straight1)
 #         time.sleep(sleep)
         
-        sense.set_pixels(straight2)
-        time.sleep(sleep)
+#         sense.set_pixels(straight2)
+#         time.sleep(sleep)
 #         sense.set_pixels(straight2)
 #         time.sleep(sleep)
 
-        sense.set_pixels(straight3)
-        time.sleep(sleep)
+#         sense.set_pixels(straight3)
+#         time.sleep(sleep)
 #         sense.set_pixels(straight3)
 #         time.sleep(sleep)
         
