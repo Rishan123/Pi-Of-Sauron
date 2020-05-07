@@ -57,7 +57,6 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     # predictions
     net.setInput(blob)
     detections = net.forward()
-
     # loop over the detections
     for i in range(0, detections.shape[2]):
         # extract the confidence (i.e., probability) associated with the
