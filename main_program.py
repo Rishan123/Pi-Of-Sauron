@@ -82,8 +82,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
             # probability
             text = "{:.2f}%".format(confidence * 100)
             y = startY - 10 if startY - 10 > 10 else startY + 10
-            cv2.rectangle(frame, (startX, startY), (endX, endY),
-                (0, 0, 255), 2)
+#             cv2.rectangle(frame, (startX, startY), (endX, endY),
+#                 (0, 0, 255), 2)
         
             if startX >= 200 and startX <= 400:
                 direction = 'left'
@@ -103,14 +103,14 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         print(direction,confidence)
         
     # show the output frame
-    cv2.imshow("Frame", frame)
-    
-    key = cv2.waitKey(1) & 0xFF
+#     cv2.imshow("Frame", frame)
+#     
+#     key = cv2.waitKey(1) & 0xFF
     rawCapture.truncate(0)
     
     # if the `q` key was pressed, break from the loop
-    if key == ord("q"):
-        break
+#     if key == ord("q"):
+#         break
 
 # do a bit of cleanup
 cv2.destroyAllWindows()
