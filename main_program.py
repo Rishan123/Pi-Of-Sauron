@@ -50,8 +50,11 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     net.setInput(blob)
     detections = net.forward()
 <<<<<<< HEAD
+<<<<<<< HEAD
     # loop over the detections
 =======
+=======
+>>>>>>> f369b4b7df8190e6adf5fd44bbdb9b8698ff0ae4
     # If there was no face detected in previous frame, go to centre
     # If there was a face than pevious direction will be kept
     if round(no_face_count/detections.shape[2]) > 5:
@@ -59,7 +62,11 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         time.sleep(sleep)
     
     # Now loop over the detections
+<<<<<<< HEAD
 >>>>>>> new-way-of-face-detection
+=======
+    # loop over the detections
+>>>>>>> f369b4b7df8190e6adf5fd44bbdb9b8698ff0ae4
     for i in range(0, detections.shape[2]):
         # extract the confidence (i.e., probability) associated with the
         # prediction
