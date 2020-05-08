@@ -56,6 +56,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         time.sleep(sleep)
     
     # Now loop over the detections
+    # loop over the detections
     for i in range(0, detections.shape[2]):
         # extract the confidence (i.e., probability) associated with the
         # prediction
