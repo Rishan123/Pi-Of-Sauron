@@ -23,16 +23,11 @@ upper_red = np.array(upper_red)
 lower_red = np.array(lower_red)
 
 left1 = look_left(1)
-left2 = look_left(2)
-left3 = look_left(3)
-
 right1 = look_right(1)
-right2 = look_right(2)
-right3 = look_right(3)
-
 straight1 = look_straight(1)
-straight2 = look_straight(2)
-straight3 = look_straight(3)
+
+found_face = False
+no_face_count = 0
 
 # load our serialized model from disk
 print("[INFO] loading model...")
@@ -45,9 +40,6 @@ time.sleep(1.0)
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
     
     frame = frame.array
-    left = frame[0:res1, 0:round((res2/2))]
-    right = frame[0:res1, (round(res2/2+1)+1):res2]
-    
     # grab the frame dimensions and convert it to a blob
     (h, w) = frame.shape[:2]
     blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)), 1.0,
@@ -57,6 +49,13 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     # predictions
     net.setInput(blob)
     detections = net.forward()
+    # If there was no face detected in previous frame, go to centre
+    # If there was a face than pevious direction will be kept
+    if round(no_face_count/detections.shape[2]) > 5:
+        sense.set_pixels(straight1)
+        time.sleep(sleep)
+    
+    # Now loop over the detections
     # loop over the detections
     for i in range(0, detections.shape[2]):
         # extract the confidence (i.e., probability) associated with the
@@ -66,45 +65,42 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         # filter out weak detections by ensuring the `confidence` is
         # greater than the minimum confidence
         if confidence < 0.951:
+            no_face_count += 1
+            #print('no face detected',i)
+            direction = 'straight'
             continue
-
-        # compute the (x, y)-coordinates of the bounding box for the
-        # object
-        box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
-        (startX, startY, endX, endY) = box.astype("int")
-         
-        # draw the bounding box of the face along with the associated
-        # probability
-        text = "{:.2f}%".format(confidence * 100)
-        y = startY - 10 if startY - 10 > 10 else startY + 10
-        cv2.rectangle(frame, (startX, startY), (endX, endY),
-            (0, 0, 255), 2)
-#         cv2.putText(frame, text, (startX, y),
-#             cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
-    mask_left = cv2.inRange(left,upper_red,lower_red)
-    left_cnt = (mask_left==255).sum()
-    
-    mask_right = cv2.inRange(right,upper_red,lower_red)
-    right_cnt = (mask_right==255).sum()
-    
-    if right_cnt > left_cnt:
-        direction = 'right'
-        sense.set_pixels(right1)
-        print('I see you....')
         
-    elif left_cnt > right_cnt:
-        direction = 'left'
-        sense.set_pixels(left1)
-        time.sleep(sleep)
-        print('I see you....')
-
-    else: 
-        direction = 'straight'
-        sense.set_pixels(straight1)
-        time.sleep(sleep)
-
+        else:
+            found_face = True
+            no_face_count = 0
+            # compute the (x, y)-coordinates of the bounding box for the
+            # object
+            box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
+            (startX, startY, endX, endY) = box.astype("int")
+           # draw the bounding box of the face along with the associated
+            # probability
+            text = "{:.2f}%".format(confidence * 100)
+            y = startY - 10 if startY - 10 > 10 else startY + 10
+            cv2.rectangle(frame, (startX, startY), (endX, endY),
+                (0, 0, 255), 2)
         
-    print(direction)
+            if startX >= 200 and startX <= 400:
+                direction = 'left'
+                sense.set_pixels(left1)
+                print('I see you....',i)
+        
+            elif startX >= 0 and startX <= 199:
+                direction = 'right'
+                sense.set_pixels(right1)
+                print('I see you....',i)
+            else:
+                direction = 'straight'
+                sense.set_pixels(straight1)
+
+            time.sleep(sleep)
+
+        print(direction,confidence)
+        
     # show the output frame
     cv2.imshow("Frame", frame)
     
