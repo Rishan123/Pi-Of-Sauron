@@ -17,10 +17,6 @@ camera.rotation = 180
 camera.resolution = (res1, res2)
 camera.framerate = 32
 rawCapture = PiRGBArray(camera, size=(res1, res2))
-upper_red = [0, 0, 255]
-lower_red = [0, 0, 255]
-upper_red = np.array(upper_red)
-lower_red = np.array(lower_red)
 
 left1 = look_left(1)
 right1 = look_right(1)
@@ -61,6 +57,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     for i in range(0, detections.shape[2]):
         # extract the confidence (i.e., probability) associated with the
         # prediction
+        print(i)
         confidence = detections[0, 0, i, 2]
 
         # filter out weak detections by ensuring the `confidence` is
@@ -103,14 +100,14 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         print(direction,confidence)
         
     # show the output frame
-#     cv2.imshow("Frame", frame)
-#     
-#     key = cv2.waitKey(1) & 0xFF
+    cv2.imshow("Frame", frame)
+    
+    key = cv2.waitKey(1) & 0xFF
     rawCapture.truncate(0)
     
     # if the `q` key was pressed, break from the loop
-#     if key == ord("q"):
-#         break
+    if key == ord("q"):
+        break
 
 # do a bit of cleanup
 cv2.destroyAllWindows()
